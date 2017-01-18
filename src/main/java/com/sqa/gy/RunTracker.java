@@ -71,22 +71,21 @@ public class RunTracker {
 
 	public static void main(String[] args) {
 		userName = AppBasics.greetUser(appName);
-		// Request min ran each day and return as array - ints
 		System.out.print("\n");
+
 		minutesRanEachDay = requestMinRanEachDay(NUMBEROFDAYS);
-		// Print values in array
 		System.out.print("\n");
+
 		System.out.println("Minutes ran each day: " + AppBasics.returnIntArrayAsString(minutesRanEachDay));
-		// Calculate and Print total min ran in the week totalMinRanInWeek
 		System.out.print("\n");
+
 		totalMinRanInWeek = AppBasics.calcsTotalOfIntsInArray(minutesRanEachDay);
 		System.out.println("Total minutes ran this week: " + totalMinRanInWeek);
-		// Calculate and print av min ran each day
 		averageMinRanEachDay = AppBasics.calcsAverageOfIntsInArray(minutesRanEachDay);
 		System.out.println("Average minutes ran each day: " + averageMinRanEachDay);
-		// Print type of runger (minutes per week range)
-		String runnerType = determineRunnerType(totalMinRanInWeek);
 		System.out.print("\n");
+
+		String runnerType = determineRunnerType(totalMinRanInWeek);
 		System.out.println("You are a " + runnerType + ".");
 		AppBasics.farewellUser(userName, appName);
 	}
