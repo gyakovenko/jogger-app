@@ -13,6 +13,20 @@ public class AppBasics {
 
 	static Scanner scanner = new Scanner(System.in);
 
+	public static double calcsAverageOfIntsInArray(int[] anArray) {
+		int total = calcsTotalOfIntsInArray(anArray);
+		double average = (double) total / anArray.length;
+		return average;
+	}
+
+	public static int calcsTotalOfIntsInArray(int[] anArray) {
+		int total = 0;
+		for (int i = 0; i < anArray.length; i++) {
+			total += anArray[i];
+		}
+		return total;
+	}
+
 	public static void doSomething(String appName, String appActionIng) {
 		System.out.println(appName + " App is " + appActionIng);
 	}
@@ -22,26 +36,26 @@ public class AppBasics {
 		System.out.println("Bye for now, " + nameOfUser + "!");
 	}
 
-	public static String getUserInfo(String prompt) {
-		System.out.print(prompt + " ");
-		String response = scanner.nextLine();
-		return response;
-	}
-
 	public static String greetUser(String appName) {
 		System.out.println("Hello and welcome to the " + appName + " app.");
 		System.out.print("What shall I call you? ");
 		return scanner.nextLine();
 	}
 
-	public static void main(String[] args) {
-		String appActionIng = "chillin\'";
-		String userName;
-		String nameOfApp = "Hello World";
-		userName = greetUser(nameOfApp);
-		doSomething(nameOfApp, appActionIng);
-
-		farewellUser(userName, nameOfApp);
+	public static String requestUserInfo(String prompt) {
+		System.out.print(prompt + " ");
+		String response = scanner.nextLine();
+		return response;
 	}
 
+	public static String returnIntArrayAsString(int[] anArray) {
+		String arrayInAString = Integer.toString(anArray[0]);
+		for (int i = 1; i < anArray.length; i++) {
+			{
+				arrayInAString = arrayInAString + ", ";
+				arrayInAString = arrayInAString + Integer.toString(anArray[i]);
+			}
+		}
+		return arrayInAString;
+	}
 }
