@@ -48,6 +48,12 @@ public class AppBasics {
 		return response;
 	}
 
+	public static boolean requestYesorNo(String prompt) {
+		String strYes = "y";
+		String response = AppBasics.requestUserInfo(prompt + " (y/n): ");
+		return response.equalsIgnoreCase(strYes);
+	}
+
 	public static String returnIntArrayAsString(int[] anArray) {
 		String arrayInAString = Integer.toString(anArray[0]);
 		for (int i = 1; i < anArray.length; i++) {
