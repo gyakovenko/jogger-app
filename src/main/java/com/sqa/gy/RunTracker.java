@@ -10,16 +10,30 @@
 
 package com.sqa.gy;
 
+import java.text.*;
+
 import com.sqa.gy.helpers.*;
 
 public class RunTracker {
-	// Declaring public variables
+
+	// Declaring global variables
 	public static String appName = "Run Tracker";
 	public static double averageMinRanEachDay;
+	public static NumberFormat formatter = new DecimalFormat("#0.0");
 	public static int minutesRanEachDay[];
 	public static int NUMBEROFDAYS = 7;
+	public static String strYes = "y";
 	public static int totalMinRanInWeek;
 	public static String userName;
+
+	public static void askIfAnotherRound() {
+		boolean againOrNo = AppBasics.requestYesorNo("Would you like to enter data for another runner?");
+		if (againOrNo == true) {
+			runRoundofRunTracker(userName, false);
+		} else {
+			System.out.println("\nOK.");
+		}
+	}
 
 	public static String determineDayofWeek(int dayNumber) {
 		String dayName = null;
@@ -51,14 +65,32 @@ public class RunTracker {
 		return dayName;
 	}
 
+	/*
+	 * Default runner = user If first round, ask if runner = user. If yes:
+	 * return that If no: ask for runner name If not first round, ask for runner
+	 * name
+	 */
+
+	public static String determineRunnerName(String userName, boolean isFirstRound) {
+		String nameOfRunner = userName;
+		if (isFirstRound == true) {
+			// ask if the userName = runnerName
+			boolean userIsRunner = determineUserIsRunner();
+			if (userIsRunner == false) {
+				nameOfRunner = requestRunnerName();
+			}
+		} else {
+			nameOfRunner = requestRunnerName();
+		}
+		return nameOfRunner;
+	}
+
 	public static String determineRunnerType(int minRanInWeek) {
 		String locRunnerTypewithRange;
-		if (minRanInWeek < 30) {
-			locRunnerTypewithRange = "Begginning Runner (less than 30 min per week)";
-		} else if (minRanInWeek < 120) {
-			locRunnerTypewithRange = "Amateur Runner (between 30 and 120 min per week)";
+		if (minRanInWeek < 120) {
+			locRunnerTypewithRange = "Beginning Runner (less than 120 min per week)";
 		} else if (minRanInWeek < 360) {
-			locRunnerTypewithRange = "Begginning Runner (between 120 and 360 min per week)";
+			locRunnerTypewithRange = "Amateur Runner (between 120 and 360 min per week)";
 		} else if (minRanInWeek < 700) {
 			locRunnerTypewithRange = "Dedicated Runner (between 360 and 700 min per week)";
 		} else if (minRanInWeek <= 1400) {
@@ -69,25 +101,18 @@ public class RunTracker {
 		return locRunnerTypewithRange;
 	}
 
+	public static boolean determineUserIsRunner() {
+		String strIsUserRunner = AppBasics.requestUserInfo("Is the user name the same as the runner name? (y/n): ");
+		return strIsUserRunner.equalsIgnoreCase(strYes);
+	}
+
 	public static void main(String[] args) {
 		userName = AppBasics.greetUser(appName);
-		System.out.print("\n");
-
-		minutesRanEachDay = requestMinRanEachDay(NUMBEROFDAYS);
-		System.out.print("\n");
-
-		System.out.println("Minutes ran each day: " + AppBasics.returnIntArrayAsString(minutesRanEachDay));
-		System.out.print("\n");
-
-		totalMinRanInWeek = AppBasics.calcsTotalOfIntsInArray(minutesRanEachDay);
-		System.out.println("Total minutes ran this week: " + totalMinRanInWeek);
-		averageMinRanEachDay = AppBasics.calcsAverageOfIntsInArray(minutesRanEachDay);
-		System.out.println("Average minutes ran each day: " + averageMinRanEachDay);
-		System.out.print("\n");
-
-		String runnerType = determineRunnerType(totalMinRanInWeek);
-		System.out.println("You are a " + runnerType + ".");
+		boolean firstRound = true;
+		runRoundofRunTracker(userName, firstRound);
+		askIfAnotherRound();
 		AppBasics.farewellUser(userName, appName);
+		System.exit(0);
 	}
 
 	public static int[] requestMinRanEachDay(int numberOfDays) {
@@ -99,4 +124,30 @@ public class RunTracker {
 		return locMinutesRanEachDay;
 	}
 
+	public static String requestRunnerName() {
+		String locNameOfRunner = AppBasics.requestUserInfo("\nRunner's name: ");
+		return locNameOfRunner;
+	}
+
+	public static void runRoundofRunTracker(String userName, boolean isFirstRound) {
+		String runnerName = determineRunnerName(userName, isFirstRound);
+
+		System.out.println("\nOk, " + runnerName + ", let's get your running data.");
+
+		minutesRanEachDay = requestMinRanEachDay(NUMBEROFDAYS);
+		System.out.print("\n");
+
+		System.out.println("Minutes ran each day: " + AppBasics.returnIntArrayAsString(minutesRanEachDay));
+		System.out.print("\n");
+
+		totalMinRanInWeek = AppBasics.calcsTotalOfIntsInArray(minutesRanEachDay);
+		System.out.println("Total minutes ran this week: " + totalMinRanInWeek);
+		averageMinRanEachDay = AppBasics.calcsAverageOfIntsInArray(minutesRanEachDay);
+		System.out.println("Average minutes ran each day: " + formatter.format(averageMinRanEachDay));
+		System.out.print("\n");
+
+		String runnerType = determineRunnerType(totalMinRanInWeek);
+		System.out.println(runnerName + " is a " + runnerType + ".");
+		System.out.print("\n");
+	}
 }
